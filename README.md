@@ -1,0 +1,1 @@
+Repository contenente esempi ed esercizi proposti durante il corso di Interactive 3d Graphics
