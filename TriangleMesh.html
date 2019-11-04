@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <title>TriangleMesh</title>
+        <style>
+            body {
+			font-family: Monospace;
+			background-color: #f0f0f0;
+			margin: 0px;
+			overflow: hidden;
+		}
+            canvas{
+                width: 100%;
+                height: 100%;        
+            }
+        </style>
+        <script src="lib/three.js"></script>
+        <script src="lib/stats.min.js"></script>
+    </head>
+    <body>
+            
+        <script>
+           var scene, camera, renderer;
+            function Start(){
+                scene = new THREE.Scene();
+                camera= new THREE.PerspectiveCamera(75,
+                            window.innerWidth / window.innerHeight, 0.1, 1000 );
+                renderer = new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0xf0f0f0);
+                document.body.appendChild(renderer.domElement);
+                var material, geometry, mesh;
+
+                material = new THREE.MeshBasicMaterial({
+                    color: 0xff0000,
+                    side: THREE.FrontSide
+                });
+
+                geometry = new THREE.Geometry();
+                //inseriamo le coordinate di tre vertici
+                //Ogni coordinata di vertici è rappresentata da un oggetto Vector3 
+                geometry.vertices.push(new THREE.Vector3(0,0,0),
+                                       new THREE.Vector3(2,0,0),
+                                       new THREE.Vector3(0,2,0),
+                                       new THREE.Vector3(2,2,0));
+                                       
+                
+                geometry.faces.push(new THREE.Face3(0,1,2));
+                //la faccia del secondo triangolo eliminare per vedere un unico triangolo
+                //Esercizio: Disegnare un quadrilatero non ripetendo i vertici
+                //Invece di aggiungere nuovi vertici che esistono già alla lista
+                //degli vertici possiamo direttamente aggungere una faccia contenenti
+                //i vertici che già esistono com sottoindicato:
+                geometry.faces.push(new THREE.Face3(1,3,2))
+                
+                //geometry.faces.push(new THREE.Face3(3,4,5));
+                
+                mesh = new THREE.Mesh(geometry, material);
+                scene.add( mesh );
+
+                camera.position.z= 5;
+                renderer.render(scene, camera);
+                stats = new Stats();
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.top = '0px';
+                document.body.appendChild( stats.domElement );
+            }
+            function Update(){
+                requestAnimationFrame(Update);
+                stats.update();
+                renderer.render(scene, camera);
+            }
+            Start();
+            Update();
+        </script>
+        
+    </body>
+</html>
