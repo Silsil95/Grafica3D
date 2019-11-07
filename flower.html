@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>My first Three.js app</title>
+        <title>Flower</title>
         <style>
             body {
 			font-family: Monospace;
@@ -19,7 +19,7 @@
     <body>
             
         <script>
-           var scene, camera, renderer, cube, sphere, cylinder;
+           var scene, camera, renderer, cube, sphere, stem, pivot;
             function Start(){
                 scene = new THREE.Scene();
                 camera= new THREE.PerspectiveCamera(75,
@@ -27,33 +27,63 @@
                 renderer = new THREE.WebGLRenderer();
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 document.body.appendChild(renderer.domElement);
-
-                //aggiunta id un cubo
-                var sphereGeometry = new THREE.SphereGeometry(1,32,32);
-                var sphereMaterial = new THREE.MeshBasicMaterial({
-                    color: 0x00ff00
+                pivot = new THREE.Object3D();
+                scene.add(pivot);
+                pivot.rotation.x = 45 * Math.PI/180;
+                //STEM
+                var stemGeometry = new THREE.CylinderGeometry(0.2,0.2,7,32);
+                var stemMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x007f00
                 });
-                sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
-                sphere.position.set(0,2,0);
-                scene.add(sphere);
-
-                var cylinderGeometry = new THREE.CylinderGeometry(0.3,0.3,3);
-                var cylinderMaterial = new THREE.MeshBasicMaterial({
-                    color: 0xff0000
-                });
-                cylinder = new THREE.Mesh(cylinderGeometry,cylinderMaterial);
-                cylinder.position.set(0,2,0);
-                cylinder.rotation.z = 90 * Math.PI / 180;
-                scene.add(cylinder);
+                stem = new THREE.Mesh(stemGeometry,stemMaterial);
                 
+                pivot.add(stem);
+                stem.position.set(0,-5,0);
+                //stem.rotation.x += 0.4;
 
-                camera.position.z= 5;
+                var sphereGeometry = new THREE.SphereGeometry(0.3,32,32);
+                var sphereMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x004c00
+                });
+               
+                sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+                sphere.position.set(0,-1.5,0);
+                pivot.add(sphere);
+                
+               
+                CreatePetals();
+                
+               
+                //scene.add(petal);
+                //var axesHelper = new THREE.AxesHelper( 3 );
+                //scene.add( axesHelper );
+                camera.position.set(0,0,10);
                 renderer.render(scene, camera);
 
 
 
 
                
+            }
+            function CreatePetals(){
+                
+                var petalGeometry = new THREE.CylinderGeometry(0,0.2,1.5);
+                var petalMaterial = new THREE.MeshBasicMaterial({
+                        color: 0xffdb00
+                });
+                for(let i = 0; i < 30; i++){
+                    var pivot2 = new THREE.Object3D();
+                    petal = new THREE.Mesh(petalGeometry,petalMaterial);
+                    petal.rotation.z = (90) * Math.PI/180;
+                    petal.position.set(0.9,-1.5,0);
+                   
+                    pivot2.add(petal);
+                    pivot2.rotation.y = (90 + i*15) * Math.PI/180;
+                   
+                    pivot.add(pivot2);
+                }
+                
+
             }
             function StatsStart(){
                 stats = new Stats();
